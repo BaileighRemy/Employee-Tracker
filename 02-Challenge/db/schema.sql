@@ -20,7 +20,7 @@ CREATE TABLE
     employee (
         id AUTO_INCREMENT SERIAL PRIMARY KEY,
         first_name VARCHAR(30) NOT NULL,
-        LAST_NAME VARCHAR(30) NOT NULL, 
+        last_name VARCHAR(30) NOT NULL, 
         role_id INTEGER NOT NULL,
         manager_id INTEGER,
     )
