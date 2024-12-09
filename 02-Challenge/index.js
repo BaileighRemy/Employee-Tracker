@@ -1,3 +1,3 @@
-const { mainMeu } = require('./menu');
+const { mainMenu } = require('./menu/menu/mainmenu');
 
 mainMenu();

@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+const { viewDepartmentsMenu, addDepartmentMenu } = require("./department")
 
 function mainMenu() {
     console.log("Employee Tracker Main Menu");
@@ -59,3 +60,5 @@ function mainMenu() {
         }
     })
 }
+
+exports.mainMenu = mainMenu;
