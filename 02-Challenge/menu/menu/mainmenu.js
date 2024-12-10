@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const { viewDepartmentsMenu, addDepartmentMenu } = require("./department");
 const { viewAllRoles, addRole } = require("./role");
+const { viewAllRoles, addRole } = require("./employee");
 
 function mainMenu() {
     console.log("Employee Tracker Main Menu");
