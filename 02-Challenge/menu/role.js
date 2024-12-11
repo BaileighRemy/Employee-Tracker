@@ -7,19 +7,16 @@ class Role {
         (this.salary = salary),
         (this.department_id = department_id)
     }
-    getAll() {
+    async getAll() {
         const sql = `SELECT * FROM role`;
-        return db
-        .promise()
-        .query(sql)
-        .then(([rows]) => {
-        return rows;
-    });
+        const result = await db.query(sql); 
+        return result.rows;
 }
 
-addRole() {
+async addRole() {
     const sql = `INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)`
-    return db.promise().query(sql, [this.title, this.salary, this.department_id]);
+    const result = await db.query(sql, [this.title, this.salary, this.department_id]);
+    return result.rows[0];
 }
 }
 

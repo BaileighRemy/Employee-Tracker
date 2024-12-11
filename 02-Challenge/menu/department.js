@@ -5,19 +5,16 @@ class Department {
         (this.id =id), 
         (this.name = name);
     }
-    getAll() {
+    async getAll() {
         const sql = `SELECT * FROM department`;
-        return db
-        .promise()
-        .query(sql)
-        .then(([rows]) => {
-        return rows;
-    });
+        const result = await db.query(sql); 
+        return result.rows;
 }
 
-addDepartment() {
-    const sql = `INSERT INTO department (name) VALUES ($1)`
-    return db.promise().query(sql, [this.name]);
+async addDepartment() {
+    const sql = `INSERT INTO department (name) VALUES ($1) RETURNING *`;
+    const result = await db.query(sql, [this.name]);
+    return result.rows[0];
 }
 }
 

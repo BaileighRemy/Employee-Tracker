@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const { viewDepartmentsMenu, addDepartmentMenu } = require("./department");
 const { viewAllRoles, addRole } = require("./role");
-const { viewAllRoles, addRole } = require("./employee");
+const { viewAllEmployees,addEmployee, updateEmployeeRole, } = require("./employee");
 
 function mainMenu() {
     console.log("Employee Tracker Main Menu");
@@ -27,13 +27,13 @@ function mainMenu() {
     .then(({select}) => {
         switch (select) {
             case "View All Employees":
-                viewEmployeeMenu();
+                viewAllEmployees();
                 break;
             case "Add Employee":
-                addEmployeeMenu();
+                addEmployee();
                 break;
             case "Update Employee Role":
-                addEmployeeMenu();
+                updateEmployeeRole();
                 break;
              case "View All Roles":
                 viewAllRoles();

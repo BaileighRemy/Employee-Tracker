@@ -2,65 +2,139 @@ const Role = require("../role");
 const Employee = require("../employee");
 const inquirer = require("inquirer");
 const menu = require("./mainmenu");
-const Department = require("../department");
 
-function viewAllRoles() {
-    const role = new Role();
-    role
+function viewAllEmployees() {
+  const emp = new Employee();
+  emp
     .getAll()
     .then((rows) => {
-        console.log("All Roles");
-        console.table(rows);
+      console.log("All Employees")
+      console.table(rows);
     })
     .then(() => menu.mainMenu());
 }
 
-function addRole() {
-    const department = new Department();
-    department.getAll().then((dpts) => {
-        inquirer
+
+function addEmployee() {
+  console.clear();
+  const role = new Role();
+  const mgr = new Employee();
+  role.getAll().then((roles) => {
+    mgr.getAll().then((mgrs) => {
+      let allManagers = mgrs.map((m) => {
+        return `${m.id} - ${m.first_name} ${m.last_name}`;
+      });
+      allManagers.push("None");
+      inquirer
         .prompt([
-            {
-                type: "text",
-                name: "newRoleName",
-                message: "What is the name of this new role?",
-                validate: (rolename) => {
-                    if (!rolename) {
-                        console.log("Please enter a name for this role");
-                    }
-                    return true; 
-                },
-                
-            },
-        {
+          {
             type: "text",
-            name: "roleSalary",
-          message: "How much does this role make per year?",
-          validate: (salary) => {
-            if (!salary) {
-              console.log("Please enter a yearly salary for this role!");
-            }
-            return true;
-        },
-    },
-    {
-        type: "list",
-        name: "newRoleDepartment",
-        message: "What department is this role in?",
-        choices: dpts.map((d) => {
-            return `${d.id}--${d.departmentName}`;
-        }),
-    },
+            name: "firstname",
+            message: "Enter first name.",
+            validate: (name) => {
+              if (!name) {
+                console.log("Please enter a first name for this employee!");
+              }
+              return true;
+            },
+          },
+          {
+            type: "text",
+            name: "lastname",
+            message: "Enter last name.",
+            validate: (name) => {
+              if (!name) {
+                console.log("Please enter a last name for this employee!");
+              }
+              return true;
+            },
+          },
+          {
+            type: "list",
+            name: "roleid",
+            message: "What is the new employee's role?",
+            choices: roles.map((r) => {
+              return `${r.id} - ${r.title}`;
+            }),
+          },
+          {
+            type: "list",
+            name: "manid",
+            message: "Who is the new employee's manager?",
+            choices: allManagers,
+          },
         ])
-        .then(({ newRoleName, roleSalary, newRoleDepartment }) => {
-            let truncatedId = newRoleDpt.charAt()
-            const role = new Role(null, newRoleName, roleSalary, truncatedId);
-            role.addRole();
-            console.clear();
-            viewAllRolesMenu();
-            console.table("Added role \n");
-    })
-});
+        .then(({ firstname, lastname, roleid, manid }) => {
+          let truncRoleId = roleid.split(" ");
+          let truncManId = manid.split(" ");
+          const emp = new Employee(
+            null,
+            firstname,
+            lastname,
+            truncRoleId[0],
+            truncManId[0]
+          );
+          emp.addEmployee();
+          console.clear();
+          viewAllEmployees();
+          console.table("Added employee \n");
+        });
+    });
+  });
 }
 
-module.exports = { viewAllRoles, addRole };
+function updateEmployeeRole() {
+  console.clear();
+  let role = new Role();
+  role.getAll().then((roles) => {
+    let emp = new Employee();
+    emp.getAll().then((emps) => {
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "emp",
+            message: "Which employee's role do you want to update?",
+            choices: emps.map((e) => {
+              return `${e.id} - ${e.first_name} ${e.last_name}`;
+            }),
+          },
+          {
+            type: "list",
+            name: "roleselect",
+            message: "Which role do you want to assign the selected employee?",
+            choices: roles.map((r) => {
+              return `${r.id} - ${r.title}`;
+            }),
+          },
+        ])
+        .then(({ emp, roleselect }) => {
+          let eid = emp.split(" ");
+          let rid = roleselect.split(" ");
+          let selectedEmp = new Employee(eid[0]);
+          selectedEmp.getEmployeeById().then((sEmp) => {
+            sEmp = sEmp[0];
+            let employee = new Employee(
+              sEmp.id,
+              sEmp.first_name,
+              sEmp.last_name,
+              rid[0],
+              sEmp.mgr_id
+            );
+            employee.updateEmployee().then(() => {
+              console.log(`
+              
+              Update was successful!`);
+              viewAllEmployees();
+            });
+          });
+        });
+    });
+  });
+}
+
+module.exports = {
+  viewAllEmployees,
+  addEmployee,
+  updateEmployeeRole,
+};

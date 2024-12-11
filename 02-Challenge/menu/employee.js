@@ -8,42 +8,30 @@ class Employee {
         (this.role_id = role_id),
         (this.manager_id = manager_id)
     }
-    getAll() {
+   async getAll() {
         const sql = `SELECT * FROM role`;
-        return db
-        .promise()
-        .query(sql)
-        .then(([rows]) => {
-        return rows;
-    });
+        const result = await db.query(sql); 
+        return result.rows;
+    
 }
 
-addEmployee() {
+async addEmployee() {
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4) RETURNING id`;
-    return db.promise().query(sql, [this.first_name, this.last_name, this.role_id, this.manager_id])
-        .then(([result]) => {
-        return result[0].id;
-    });
+    const result = await db.query(sql,[this.first_name, this.last_name, this.role_id, this.manager_id])
+    return result.rows[0];
+    
 }
 
-getEmployeeById() {
+async getEmployeeById() {
     const sql = `SELECT * FROM employee WHERE id = '${this.id}'`;
-    return db
-    .promise()
-    .query(sql)
-    .then(([row]) => {
-    return row;
-    });
+    const result = await db.query(sql); 
+    return result.rows;
 }
 
-updateEmployee() {
+async updateEmployee() {
     const sql = `UPDATE employee SET role_id = $1 WHERE id = $2`;
-    return db
-    .promise()
-    .query(sql, [this.role_id, this.id])
-    .then(([result]) => {
-        return result;
-    });
+    const result = await db.query(sql); 
+    return result.rows;
 }
 }
 
