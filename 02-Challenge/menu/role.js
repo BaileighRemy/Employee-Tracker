@@ -1,4 +1,4 @@
-const db = require("../db/connection");
+const pool = require("../db/connection");
 
 class Role {
     constructor(id, title, salary, department_id) {
@@ -9,13 +9,13 @@ class Role {
     }
     async getAll() {
         const sql = `SELECT * FROM role`;
-        const result = await db.query(sql); 
+        const result = await pool.query(sql); 
         return result.rows;
 }
 
 async addRole() {
     const sql = `INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)`
-    const result = await db.query(sql, [this.title, this.salary, this.department_id]);
+    const result = await pool.query(sql, [this.title, this.salary, this.department_id]);
     return result.rows[0];
 }
 }

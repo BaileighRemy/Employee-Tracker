@@ -19,24 +19,29 @@ function addDepartmentMenu() {
     inquirer
     .prompt([
         {
-            type: "text",
-            name: newDepartmentName,
+            type: "input",
+            name: "newDepartmentName",
             message: "What is the name of the new department?",
             validate: (departmentname) => {
                 if (!departmentname) {
                     console.log("Please enter a department name");
+                    return false;
                 }
                 return true;
             },
         },
     ])
     .then(({ newDepartmentName }) => {
-        const department = new department(null, newDepartmentName);
-        department.addDepartment();
+        const department = new Department(null, newDepartmentName);
+        return department.addDepartment();
+    })
+    .then(() => {
         console.clear();
+        console.log("Added department \n"); 
         viewDepartmentsMenu();
-        console.table("Added department \n");
+    })
+    .catch((error) => {
+        console.error("Error adding department:", error);
     });
 }
-
-module.exports = { viewDepartmentsMenu, addDepartmentMenu };
+module.exports = { viewDepartmentsMenu, addDepartmentMenu }
