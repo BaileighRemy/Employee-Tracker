@@ -9,7 +9,7 @@ class Employee {
         (this.manager_id = manager_id)
     }
    async getAll() {
-        const sql = `SELECT * FROM employee`;
+        const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, manager.first_name AS manager_first, manager.last_name AS manager_last FROM employee JOIN role ON employee.role_id = role.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`;
         const result = await pool.query(sql); 
         return result.rows;
     
@@ -28,9 +28,9 @@ async getEmployeeById() {
     return result.rows;
 }
 
-async updateEmployee() {
+async updateEmployee(empID, roleID) {
     const sql = `UPDATE employee SET role_id = $1 WHERE id = $2`;
-    const result = await pool.query(sql); 
+    const result = await pool.query(sql, [roleID, empID]); 
     return result.rows;
 }
 }

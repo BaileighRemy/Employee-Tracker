@@ -121,7 +121,11 @@ function updateEmployeeRole() {
               rid[0],
               sEmp.mgr_id
             );
-            employee.updateEmployee().then(() => {
+
+            console.log(emp, roleselect)
+            const empID = emp.split(' - ')[0];
+            const roleID = roleselect.split(' - ')[0]
+            employee.updateEmployee(empID, roleID).then(() => {
               console.log(`
               
               Update was successful!`);
